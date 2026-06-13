@@ -144,7 +144,10 @@ export default class BattleScene extends Phaser.Scene {
     if (this.tickTimerHandle) this.tickTimerHandle.remove();
     root.querySelectorAll('.kb-choice').forEach(b => b.disabled = true);
 
-    const choice = btn.dataset.choice;
+    // On timeout, submit an empty sentinel (never matches a real option key A–D) so the server
+    // re-scores it as wrong. Otherwise the first option's key auto-fills and may coincidentally
+    // match the correct answer, granting an undeserved win/star for not answering.
+    const choice = isTimeout ? '' : btn.dataset.choice;
     const q = this.battle.current();
     const elapsed = (performance.now() - this.questionStart) / 1000;
     const correct = !isTimeout && await checkAnswer(q.q_id, choice, q.answer_hash);

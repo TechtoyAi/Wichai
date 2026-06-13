@@ -1,3 +1,4 @@
+import { api } from '../api.js';
 import * as audio from '../audio.js';
 import * as storage from '../storage.js';
 
@@ -84,15 +85,25 @@ export default class ResultScene extends Phaser.Scene {
       audio.play('click');
       this.scene.start('StageMap', { token: this.token });
     });
-    btnMap.node.querySelector('#kb-r-next').addEventListener('click', () => {
+    btnMap.node.querySelector('#kb-r-next').addEventListener('click', async () => {
       audio.play('click');
       if (!win && this.stage && this.stage.stage_id) {
-        // "เล่นซ้ำ" — restart the same stage directly
+        // "เล่นซ้ำ" — restart the same stage
         this.scene.start('Battle', { token: this.token, stage_id: this.stage.stage_id });
-      } else {
-        // "ด่านถัดไป" — back to map (auto-scrolls to next unplayed stage)
-        this.scene.start('StageMap', { token: this.token });
+        return;
       }
+      // "ด่านถัดไป" — launch the next stage in sequence; fall back to map if last/none
+      try {
+        const res = await api.stages(this.token);
+        const stages = res.stages || [];
+        const i = stages.findIndex(s => s.stage_id === (this.stage && this.stage.stage_id));
+        const next = i >= 0 ? stages[i + 1] : null;
+        if (next) {
+          this.scene.start('Battle', { token: this.token, stage_id: next.stage_id });
+          return;
+        }
+      } catch (e) { /* fall through to map */ }
+      this.scene.start('StageMap', { token: this.token });
     });
 
     // Update stored user
