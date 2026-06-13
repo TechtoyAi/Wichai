@@ -153,7 +153,10 @@ export default class BattleScene extends Phaser.Scene {
     btn.classList.add(correct ? 'correct' : 'wrong');
 
     if (correct) {
-      audio.play(critical ? 'critical' : 'correct');
+      // Always play the interface-pack 'correct' chime (proven on-device — same pack as the
+      // working 'wrong'/'heart'); layer the sci-fi 'critical' accent on top for fast answers.
+      audio.play('correct');
+      if (critical) audio.play('critical');
       this.monsterHp = Math.max(0, this.monsterHp - 1);
       this.tweens.add({ targets: this.monster, x: this.monster.x + 10, duration: 80, yoyo: true, repeat: 3 });
       if (critical) this.tweens.add({ targets: this.hero, scale: 2.4, duration: 150, yoyo: true });
