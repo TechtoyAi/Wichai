@@ -17,6 +17,7 @@ export default class ResultScene extends Phaser.Scene {
 
   create(data) {
     this.token = data.token;
+    this.stage = data.stage;
     const r = data.result;
     const win = r.result === 'win';
     const w = this.scale.width, h = this.scale.height;
@@ -85,7 +86,13 @@ export default class ResultScene extends Phaser.Scene {
     });
     btnMap.node.querySelector('#kb-r-next').addEventListener('click', () => {
       audio.play('click');
-      this.scene.start('StageMap', { token: this.token });
+      if (!win && this.stage && this.stage.stage_id) {
+        // "เล่นซ้ำ" — restart the same stage directly
+        this.scene.start('Battle', { token: this.token, stage_id: this.stage.stage_id });
+      } else {
+        // "ด่านถัดไป" — back to map (auto-scrolls to next unplayed stage)
+        this.scene.start('StageMap', { token: this.token });
+      }
     });
 
     // Update stored user

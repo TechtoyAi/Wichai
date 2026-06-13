@@ -44,7 +44,8 @@ function renderHTML(stages, user) {
         </div>
         <div style="display:flex;gap:6px;">
           <button id="kb-mute" title="เสียง">🔊</button>
-          <button id="kb-leader">🏆</button>
+          <button id="kb-leader" title="อันดับ">🏆</button>
+          <button id="kb-logout" title="ออกจากระบบ">🚪</button>
         </div>
       </div>
       ${newBanner}
@@ -55,7 +56,7 @@ function renderHTML(stages, user) {
       .kb-top { display:flex; justify-content:space-between; align-items:center; padding-bottom:12px; border-bottom:1px solid #2d3748; margin-bottom:12px; }
       .kb-name { font-size:15px; font-weight:bold; }
       .kb-stats { font-size:11px; opacity:0.7; }
-      #kb-mute, #kb-leader { background:#16213e; color:#fff; border:1px solid #2d3748; padding:8px 10px; border-radius:8px; cursor:pointer; }
+      #kb-mute, #kb-leader, #kb-logout { background:#16213e; color:#fff; border:1px solid #2d3748; padding:8px 10px; border-radius:8px; cursor:pointer; }
       .kb-newbanner { background:#e94560; color:#fff; text-align:center; padding:10px; border-radius:8px; margin-bottom:12px; cursor:pointer; font-weight:bold; }
       .kb-card { background:linear-gradient(135deg,#16213e 0%, #1a1a2e 100%); border-radius:12px; padding:14px; display:flex; gap:14px; align-items:center; position:relative; border-left:4px solid #ffd700; margin-left:32px; margin-bottom:14px; cursor:pointer; }
       .kb-card.current { border-left-color:#e94560; box-shadow:0 0 16px rgba(233,69,96,0.3); }
@@ -138,6 +139,14 @@ export default class StageMapScene extends Phaser.Scene {
     muteBtn.addEventListener('click', () => {
       const muted = audio.toggleMute();
       muteBtn.textContent = muted ? '🔇' : '🔊';
+    });
+
+    // Logout
+    root.querySelector('#kb-logout').addEventListener('click', () => {
+      audio.play('click');
+      storage.del('token');
+      storage.del('user');
+      this.scene.start('Auth');
     });
 
     // NEW banner click → scroll to newest

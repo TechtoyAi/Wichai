@@ -3,7 +3,7 @@
 Phaser.js game ที่เชื่อมกับ GAS backend (ดู `../README.md` สำหรับ backend).
 
 ## เล่นได้ที่
-https://techtoyai.github.io/knowledge-battle-web/  *(เปิดใช้งานหลัง deploy — ดูขั้นตอนด้านล่าง)*
+https://techtoyai.github.io/Wichai/  *(live — deploy แล้ว 2026-06-13)*
 
 ## Dev local
 ```bash
@@ -44,4 +44,4 @@ src/
 ```
 
 ## Deploy → GitHub Pages
-ดูขั้นตอน copy-paste ใน `../README.md` หัวข้อ "Deploy Frontend".
+Host = repo `TechtoyAi/Wichai` (public, Pages เปิดอยู่, deploy key เขียนได้). อัปเดตเกม: ดูขั้นตอนใน `../README.md` หัวข้อ "Deploy Frontend".
